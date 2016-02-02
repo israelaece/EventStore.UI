@@ -77,6 +77,41 @@
         </tbody>
     </table>
     <div class="last-updated">Last updated: <span>{{ lastUpdatedTime | date : 'yyyy-MM-d HH:mm:ss' }}</span></div>
+    <div ng-show="replicas.length > 0">
+        <br />
+        <header class="page-header">
+            <h2 class="page-title">Replica Status</h2>
+        </header>
+        <table class="table-nodes">
+            <thead>
+                <tr>
+                    <th>Replica Endpoint</th>
+                    <th>Total Sent (bytes)</th>
+                    <th>Total Received (bytes)</th>
+                    <th>Pending Send (bytes)</th>
+                    <th>Pending Receive (bytes)</th>
+                    <th>Send Queue Size</th>
+                    <th>To Catch Up (bytes)</th>
+                    <th>Transfer Speed (bytes/second)</th>
+                    <th>Estimated Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="replica in replicas">
+                    <td>{{replica.subscriptionEndpoint}}</td>
+                    <td>{{replica.totalBytesSent | number}}</td>
+                    <td>{{replica.totalBytesReceived | number}}</td>
+                    <td>{{replica.pendingSendBytes | number}}</td>
+                    <td>{{replica.pendingReceivedBytes | number}}</td>
+                    <td>{{replica.sendQueueSize | number}}</td>
+                    <td ng-if="!replica.isCatchingUp" colspan="3">Caught Up</td>
+                    <td ng-if="replica.isCatchingUp">{{replica.bytesToCatchUp | number}}</td>
+                    <td ng-if="replica.isCatchingUp">{{replica.approxSpeed | number}}</td>
+                    <td ng-if="replica.isCatchingUp">{{replica.estimatedTime}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
     function selectText(element) {
